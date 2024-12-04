@@ -2,15 +2,18 @@ package Views;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Dashboard {
     JFrame frame;
     JPanel sidebar;
     JPanel mainPanel;
     JButton showMemoriesButton;
+    JButton displayNewMemoryFormButton;
     MemoriesTable memoriesTable;
 
     boolean IsMemoriesTableActive = false;
+    boolean IsNewMemoryFormActive = false;
 
     public Dashboard()
     {
@@ -26,9 +29,16 @@ public class Dashboard {
         showMemoriesButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         showMemoriesButton.setAlignmentY(Component.TOP_ALIGNMENT);
 
+        displayNewMemoryFormButton = new JButton("New Memory");
+        displayNewMemoryFormButton.setSize(140, 80);
+        displayNewMemoryFormButton.addActionListener(e -> DisplayNewMemoryForm());
+        displayNewMemoryFormButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        displayNewMemoryFormButton.setAlignmentY(Component.TOP_ALIGNMENT);
+
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setPreferredSize(new Dimension(showMemoriesButton.getWidth() + 20, frame.getHeight()));
         sidebar.add(showMemoriesButton);
+        sidebar.add(displayNewMemoryFormButton);
         sidebar.setBackground(Color.DARK_GRAY);
 
         frame.add(sidebar, BorderLayout.WEST);
@@ -56,5 +66,18 @@ public class Dashboard {
         memoriesTable.DisplayMemoriesTable(mainPanel);
         IsMemoriesTableActive = true;
         showMemoriesButton.setText("Hide \n Memories");
+    }
+
+    public void onNewMemoryFormHandler()
+    {
+        displayNewMemoryFormButton.setEnabled(true);
+        IsMemoriesTableActive = false;
+    }
+
+    public void DisplayNewMemoryForm()
+    {
+        if(!IsNewMemoryFormActive) displayNewMemoryFormButton.setEnabled(false);
+        ActionListener onCloseHandler = (e) -> onNewMemoryFormHandler();
+        var form = new NewMemoryForm(onCloseHandler);
     }
 }
